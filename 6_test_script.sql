@@ -262,3 +262,6 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('All tests completed.');
 END;
 /
+
+SELECT /*+RULE*/ * FROM vw_observation_records WHERE timestamp>=TRUNC(sysdate);
+SELECT /*+RULE*/ * FROM sightings WHERE timestamp>=TRUNC(sysdate);

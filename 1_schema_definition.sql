@@ -133,6 +133,7 @@ CREATE INDEX idx_participation_event ON participation(event_id);
 CREATE INDEX idx_sightings_event_timestamp ON sightings(event_id, timestamp);
 CREATE INDEX idx_sightings_user ON sightings(user_id);
 CREATE INDEX idx_sightings_bird ON sightings(bird_id);
+CREATE INDEX idx_sightings_timestamp ON sightings(timestamp);
 
 CREATE INDEX idx_notes_created_at ON notes(created_at);
 
@@ -158,14 +159,6 @@ EXCEPTION
 END;
 /
 
--- Log deletion of bird species
-CREATE TABLE bird_species_log (
-    log_id          NUMBER GENERATED ALWAYS AS IDENTITY,
-    bird_id         NUMBER,
-    deleted_at      TIMESTAMP DEFAULT SYSTIMESTAMP,
-    deleted_by      VARCHAR2(100)
-);
-
 CREATE OR REPLACE TRIGGER trg_log_deleted_bird
 AFTER DELETE ON bird_species
 FOR EACH ROW
@@ -174,6 +167,15 @@ BEGIN
     VALUES (:OLD.bird_id, USER);
 END;
 /
+
+-- Log deletion of bird species
+CREATE TABLE bird_species_log (
+    log_id          NUMBER GENERATED ALWAYS AS IDENTITY,
+    bird_id         NUMBER,
+    deleted_at      TIMESTAMP DEFAULT SYSTIMESTAMP,
+    deleted_by      VARCHAR2(100)
+);
+
 
 -- ===========================================
 -- PACKAGE INTERFACES
